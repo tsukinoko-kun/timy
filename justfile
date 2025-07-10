@@ -1,0 +1,2 @@
+prebuild:
+    sqlc generate
