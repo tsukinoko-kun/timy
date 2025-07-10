@@ -55,6 +55,8 @@ var logCmd = &cobra.Command{
 				month = ptr(int64(time.Now().Local().Month()))
 				if year != nil {
 					return errors.New("year is set but month is not, makes no sense")
+				} else {
+					year = ptr(int64(time.Now().Local().Year()))
 				}
 			}
 		}
