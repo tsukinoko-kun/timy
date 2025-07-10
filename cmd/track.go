@@ -11,7 +11,7 @@ import (
 var trackCmd = &cobra.Command{
 	Use:     "track",
 	Short:   "Track time at a day",
-	Example: `timy track --date 2023-01-01 --time 1h30m`,
+	Example: `timy track --date 2023-01-01 --time 1h30m -m work`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var date time.Time
 		if cmd.Flag("date").Changed {
