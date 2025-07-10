@@ -10,15 +10,16 @@ import (
 )
 
 const addTime = `-- name: AddTime :exec
-INSERT INTO times (timespan, year, month, day_of_month) VALUES (?, ?, ?, ?)
+INSERT INTO times (timespan, description, year, month, day_of_month) VALUES (?, ?, ?, ?, ?)
 `
 
 // AddTime
 //
-//	INSERT INTO times (timespan, year, month, day_of_month) VALUES (?, ?, ?, ?)
-func (q *Queries) AddTime(ctx context.Context, timespan string, year int64, month int64, dayOfMonth int64) error {
+//	INSERT INTO times (timespan, description, year, month, day_of_month) VALUES (?, ?, ?, ?, ?)
+func (q *Queries) AddTime(ctx context.Context, timespan string, description string, year int64, month int64, dayOfMonth int64) error {
 	_, err := q.db.ExecContext(ctx, addTime,
 		timespan,
+		description,
 		year,
 		month,
 		dayOfMonth,
@@ -27,25 +28,30 @@ func (q *Queries) AddTime(ctx context.Context, timespan string, year int64, mont
 }
 
 const getTimesYear = `-- name: GetTimesYear :many
-SELECT timespan FROM times WHERE year = ?
+SELECT timespan, description FROM times WHERE year = ?
 `
+
+type GetTimesYearRow struct {
+	Timespan    string
+	Description string
+}
 
 // GetTimesYear
 //
-//	SELECT timespan FROM times WHERE year = ?
-func (q *Queries) GetTimesYear(ctx context.Context, year int64) ([]string, error) {
+//	SELECT timespan, description FROM times WHERE year = ?
+func (q *Queries) GetTimesYear(ctx context.Context, year int64) ([]GetTimesYearRow, error) {
 	rows, err := q.db.QueryContext(ctx, getTimesYear, year)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []GetTimesYearRow
 	for rows.Next() {
-		var timespan string
-		if err := rows.Scan(&timespan); err != nil {
+		var i GetTimesYearRow
+		if err := rows.Scan(&i.Timespan, &i.Description); err != nil {
 			return nil, err
 		}
-		items = append(items, timespan)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -57,25 +63,30 @@ func (q *Queries) GetTimesYear(ctx context.Context, year int64) ([]string, error
 }
 
 const getTimesYearMonth = `-- name: GetTimesYearMonth :many
-SELECT timespan FROM times WHERE year = ? AND month = ?
+SELECT timespan, description FROM times WHERE year = ? AND month = ?
 `
+
+type GetTimesYearMonthRow struct {
+	Timespan    string
+	Description string
+}
 
 // GetTimesYearMonth
 //
-//	SELECT timespan FROM times WHERE year = ? AND month = ?
-func (q *Queries) GetTimesYearMonth(ctx context.Context, year int64, month int64) ([]string, error) {
+//	SELECT timespan, description FROM times WHERE year = ? AND month = ?
+func (q *Queries) GetTimesYearMonth(ctx context.Context, year int64, month int64) ([]GetTimesYearMonthRow, error) {
 	rows, err := q.db.QueryContext(ctx, getTimesYearMonth, year, month)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []GetTimesYearMonthRow
 	for rows.Next() {
-		var timespan string
-		if err := rows.Scan(&timespan); err != nil {
+		var i GetTimesYearMonthRow
+		if err := rows.Scan(&i.Timespan, &i.Description); err != nil {
 			return nil, err
 		}
-		items = append(items, timespan)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -87,25 +98,30 @@ func (q *Queries) GetTimesYearMonth(ctx context.Context, year int64, month int64
 }
 
 const getTimesYearMonthDay = `-- name: GetTimesYearMonthDay :many
-SELECT timespan FROM times WHERE year = ? AND month = ? AND day_of_month = ?
+SELECT timespan, description FROM times WHERE year = ? AND month = ? AND day_of_month = ?
 `
+
+type GetTimesYearMonthDayRow struct {
+	Timespan    string
+	Description string
+}
 
 // GetTimesYearMonthDay
 //
-//	SELECT timespan FROM times WHERE year = ? AND month = ? AND day_of_month = ?
-func (q *Queries) GetTimesYearMonthDay(ctx context.Context, year int64, month int64, dayOfMonth int64) ([]string, error) {
+//	SELECT timespan, description FROM times WHERE year = ? AND month = ? AND day_of_month = ?
+func (q *Queries) GetTimesYearMonthDay(ctx context.Context, year int64, month int64, dayOfMonth int64) ([]GetTimesYearMonthDayRow, error) {
 	rows, err := q.db.QueryContext(ctx, getTimesYearMonthDay, year, month, dayOfMonth)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []GetTimesYearMonthDayRow
 	for rows.Next() {
-		var timespan string
-		if err := rows.Scan(&timespan); err != nil {
+		var i GetTimesYearMonthDayRow
+		if err := rows.Scan(&i.Timespan, &i.Description); err != nil {
 			return nil, err
 		}
-		items = append(items, timespan)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

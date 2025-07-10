@@ -40,6 +40,7 @@ var trackCmd = &cobra.Command{
 		if err := db.Q.AddTime(
 			cmd.Context(),
 			simeSpan.String(),
+			cmd.Flag("description").Value.String(),
 			int64(date.Local().Year()),
 			int64(date.Local().Month()),
 			int64(date.Local().Day()),
@@ -54,5 +55,7 @@ var trackCmd = &cobra.Command{
 func init() {
 	trackCmd.Flags().StringP("date", "d", "", "Date to track time")
 	trackCmd.Flags().StringP("time", "t", "", "Time to track")
+	trackCmd.Flags().StringP("description", "m", "", "Description of time")
+	trackCmd.MarkFlagRequired("time")
 	rootCmd.AddCommand(trackCmd)
 }

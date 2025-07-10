@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"os"
 	"path/filepath"
+	"time"
 
 	_ "modernc.org/sqlite"
 )
@@ -40,4 +41,41 @@ func Close() {
 		}
 		Q = nil
 	}
+}
+
+func (ymd GetTimesYearMonthDayRow) GetTimespan() (time.Duration, error) {
+	return time.ParseDuration(ymd.Timespan)
+}
+
+func (ymd GetTimesYearMonthDayRow) GetDescription() string {
+	return ymd.Description
+}
+
+func (ym GetTimesYearMonthRow) GetTimespan() (time.Duration, error) {
+	return time.ParseDuration(ym.Timespan)
+}
+
+func (ym GetTimesYearMonthRow) GetDescription() string {
+	return ym.Description
+}
+
+func (y GetTimesYearRow) GetTimespan() (time.Duration, error) {
+	return time.ParseDuration(y.Timespan)
+}
+
+func (y GetTimesYearRow) GetDescription() string {
+	return y.Description
+}
+
+type GetTimes interface {
+	GetTimespan() (time.Duration, error)
+	GetDescription() string
+}
+
+func ConvertGetTimes[T GetTimes](times []T) []GetTimes {
+	converted := make([]GetTimes, len(times))
+	for i, t := range times {
+		converted[i] = t
+	}
+	return converted
 }

@@ -5,9 +5,10 @@
 package db
 
 type Time struct {
-	ID         int64
-	Timespan   string
-	Year       int64
-	Month      int64
-	DayOfMonth int64
+	ID          int64
+	Timespan    string
+	Description string
+	Year        int64
+	Month       int64
+	DayOfMonth  int64
 }

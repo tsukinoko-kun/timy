@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -61,23 +62,28 @@ var logCmd = &cobra.Command{
 			}
 		}
 
-		var times []string
-		var err error
+		var times []db.GetTimes
 
 		if year != nil {
 			if month != nil {
 				if day != nil {
-					if times, err = db.Q.GetTimesYearMonthDay(cmd.Context(), *year, *month, *day); err != nil {
+					if timesConcrete, err := db.Q.GetTimesYearMonthDay(cmd.Context(), *year, *month, *day); err != nil {
 						return err
+					} else {
+						times = db.ConvertGetTimes(timesConcrete)
 					}
 				} else {
-					if times, err = db.Q.GetTimesYearMonth(cmd.Context(), *year, *month); err != nil {
+					if timesConcrete, err := db.Q.GetTimesYearMonth(cmd.Context(), *year, *month); err != nil {
 						return err
+					} else {
+						times = db.ConvertGetTimes(timesConcrete)
 					}
 				}
 			} else {
-				if times, err = db.Q.GetTimesYear(cmd.Context(), *year); err != nil {
+				if timesConcrete, err := db.Q.GetTimesYear(cmd.Context(), *year); err != nil {
 					return err
+				} else {
+					times = db.ConvertGetTimes(timesConcrete)
 				}
 			}
 		} else {
@@ -85,15 +91,22 @@ var logCmd = &cobra.Command{
 		}
 
 		totalTimespan := time.Duration(0)
+		comments := strings.Builder{}
 		for _, timespan := range times {
-			ts, err := time.ParseDuration(timespan)
+			ts, err := timespan.GetTimespan()
 			if err != nil {
 				return err
 			}
 			totalTimespan += ts
+			comments.WriteString(timespan.GetDescription())
+			comments.WriteString("\n\n")
 		}
 
 		cmd.Printf("Total timespan: %s\n", totalTimespan)
+
+		if commentsStr := strings.TrimSpace(comments.String()); commentsStr != "" {
+			cmd.Printf("Comments:\n%s", commentsStr)
+		}
 
 		return nil
 	},

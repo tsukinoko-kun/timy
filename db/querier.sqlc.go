@@ -11,20 +11,20 @@ import (
 type Querier interface {
 	//AddTime
 	//
-	//  INSERT INTO times (timespan, year, month, day_of_month) VALUES (?, ?, ?, ?)
-	AddTime(ctx context.Context, timespan string, year int64, month int64, dayOfMonth int64) error
+	//  INSERT INTO times (timespan, description, year, month, day_of_month) VALUES (?, ?, ?, ?, ?)
+	AddTime(ctx context.Context, timespan string, description string, year int64, month int64, dayOfMonth int64) error
 	//GetTimesYear
 	//
-	//  SELECT timespan FROM times WHERE year = ?
-	GetTimesYear(ctx context.Context, year int64) ([]string, error)
+	//  SELECT timespan, description FROM times WHERE year = ?
+	GetTimesYear(ctx context.Context, year int64) ([]GetTimesYearRow, error)
 	//GetTimesYearMonth
 	//
-	//  SELECT timespan FROM times WHERE year = ? AND month = ?
-	GetTimesYearMonth(ctx context.Context, year int64, month int64) ([]string, error)
+	//  SELECT timespan, description FROM times WHERE year = ? AND month = ?
+	GetTimesYearMonth(ctx context.Context, year int64, month int64) ([]GetTimesYearMonthRow, error)
 	//GetTimesYearMonthDay
 	//
-	//  SELECT timespan FROM times WHERE year = ? AND month = ? AND day_of_month = ?
-	GetTimesYearMonthDay(ctx context.Context, year int64, month int64, dayOfMonth int64) ([]string, error)
+	//  SELECT timespan, description FROM times WHERE year = ? AND month = ? AND day_of_month = ?
+	GetTimesYearMonthDay(ctx context.Context, year int64, month int64, dayOfMonth int64) ([]GetTimesYearMonthDayRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

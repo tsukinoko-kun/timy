@@ -1,11 +1,11 @@
 -- name: AddTime :exec
-INSERT INTO times (timespan, year, month, day_of_month) VALUES (?, ?, ?, ?);
+INSERT INTO times (timespan, description, year, month, day_of_month) VALUES (?, ?, ?, ?, ?);
 
 -- name: GetTimesYear :many
-SELECT timespan FROM times WHERE year = ?;
+SELECT timespan, description FROM times WHERE year = ?;
 
 -- name: GetTimesYearMonth :many
-SELECT timespan FROM times WHERE year = ? AND month = ?;
+SELECT timespan, description FROM times WHERE year = ? AND month = ?;
 
 -- name: GetTimesYearMonthDay :many
-SELECT timespan FROM times WHERE year = ? AND month = ? AND day_of_month = ?;
+SELECT timespan, description FROM times WHERE year = ? AND month = ? AND day_of_month = ?;
