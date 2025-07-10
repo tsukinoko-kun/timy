@@ -14,7 +14,7 @@ var Q *Queries
 func init() {
 	filename := getLocation()
 	_ = os.MkdirAll(filepath.Dir(filename), 0755)
-	db, err := sql.Open("sqlite", filename)
+	db, err := sql.Open("sqlite", "file:"+filename)
 	if err != nil {
 		panic(err)
 	}

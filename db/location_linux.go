@@ -7,8 +7,8 @@ import (
 
 func getLocation() string {
 	if xdg, ok := os.LookupEnv("XDG_DATA_HOME"); ok {
-		return "file:" + filepath.Join(xdg, "timy", "timy.db")
+		return filepath.Join(xdg, "timy", "timy.db")
 	}
 	home := os.Getenv("HOME")
-	return "file:" + filepath.Join(home, ".local", "share", "timy", "timy.db")
+	return filepath.Join(home, ".local", "share", "timy", "timy.db")
 }
