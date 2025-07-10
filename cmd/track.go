@@ -53,9 +53,9 @@ var trackCmd = &cobra.Command{
 }
 
 func init() {
-	trackCmd.Flags().StringP("date", "d", "", "Date to track time")
+	trackCmd.Flags().StringP("date", "d", "", "Date to track time <yyyy-mm-dd>")
 	trackCmd.Flags().StringP("time", "t", "", "Time to track")
 	trackCmd.Flags().StringP("description", "m", "", "Description of time")
-	trackCmd.MarkFlagRequired("time")
+	_ = trackCmd.MarkFlagRequired("time")
 	rootCmd.AddCommand(trackCmd)
 }
